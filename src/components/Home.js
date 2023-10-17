@@ -1,4 +1,3 @@
-// Home.js
 import React from "react";
 import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
@@ -7,22 +6,17 @@ import SocialIcons from "./SocialIcons";
 import AddButton from "./AddBttn";
 import CardList from "./profilepost";
 import Footer from "./Footer";
+import About from "./About";
 
 const Home = () => {
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div>
-        <NavBar />
-        {/* <Header /> */}
-        <SearchBar />
-        <div>
-          <CardList />
-        </div>
-        <AddButton />
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <NavBar />
+      <SearchBar />
+      <div className="flex-grow">
+        <CardList />
       </div>
-      <div className="">
-        {/* <SocialIcons /> */}
-      </div>
+      <AddButton />
       <Footer />
     </div>
   );

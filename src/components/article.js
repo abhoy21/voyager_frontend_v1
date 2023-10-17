@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { PDF_BY_ID } from "../graphql";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import "quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import Logo from "./Logo";
 
@@ -26,29 +24,36 @@ const Article = () => {
   const pdf = data.pdfById;
 
   return (
-    <div className="fixed inset-0 bg-white p-8 pt-28 mb-8 flex justify-center items-center">
-      <div className="px-6 w-11/12 mb-8 pt-20">
-        <div className="relative pt-20 mb-8">
-          <Logo />
-        </div>
-        <div className="p-2 w-full max-h-screen bg-white rounded-lg shadow-xl shadow-cyan-500/50 overflow-y-auto min-h-screen">
-          <div className="flex flex-col justify-center items-center p-6">
-            <div className="p-11 bg-white rounded-lg shadow-xl shadow-cyan-500/50 flex flex-col justify-center items-center w-2/5">
-              <h1 className="text-2xl text-black font-bold">{pdf.title}</h1>
-              <p className="text-sm text-black">Author: {pdf.author}</p>
-              <p className="text-sm text-black">
-                Institution: {pdf.institutionName}
-              </p>
-            </div>
+    <div className="flex flex-col h-screen bg-gray-50 p-8 pt-28 overflow-y-auto">
+      <div className="flex justify-center items-center">
+        <div className="w-11/12 min-h-screen max-w-5xl mx-auto">
+          <div className="relative mb-8">
+            <Logo />
+          </div>
 
-            <div className="p-6 w-full pb-24">
-              <ReactQuill
-                value={pdf.description}
-                modules={{ toolbar: null }}
-                readOnly={true}
-                theme="bubble"
-              />
+          <div className="flex flex-col bg-white rounded-2xl shadow-xl shadow-cyan-500/50">
+            <div className="p-6 items-center justify-center flex flex-col">
+              <div className="bg-white rounded-2xl shadow-xl p-6 shadow-cyan-500/50 flex flex-col justify-center items-center">
+                <h1 className="text-2xl font-bold">{pdf.title}</h1>
+                <p className="text-sm text-black">Author: {pdf.author}</p>
+                <p className="text-sm text-black">Topic: {pdf.topic}</p>
+                <p className="text-sm text-black">
+                  Institution: {pdf.institutionName}
+                </p>
+              </div>
+
+              <div className="w-full mt-6">
+                <ReactQuill
+                  value={pdf.description}
+                  modules={{ toolbar: null }}
+                  readOnly={true}
+                  theme="bubble"
+                />
+              </div>
             </div>
+          </div>
+          <div className="flex flex-row justify-center bg-white rounded-2xl shadow-md shadow-cyan-500/50 mt-6 text-black p-2 font-semibold ">
+            Created At : {new Date(pdf.createdAt).toLocaleString()}
           </div>
         </div>
       </div>

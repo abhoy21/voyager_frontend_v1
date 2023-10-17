@@ -1,26 +1,22 @@
 import React, { useState } from "react";
-import { UserCircleIcon } from "@heroicons/react/24/outline";
-import { XIcon } from "@heroicons/react/outline"; // Import the cross icon
-import { Link } from "react-router-dom";
-import logo from "../icons/docin-web-removebg-preview.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SIGNOUT_MUTATION } from "../graphql";
 import { useMutation } from "@apollo/client";
+import { FaBars, FaTimes, FaUser, FaInfo, FaSignInAlt, FaSignOutAlt, FaUserPlus, FaFire } from "react-icons/fa";
 import PaperBoatLogo from "./Logo";
 
 const Navbar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const [signoutmutation, { loading, error }] = useMutation(SIGNOUT_MUTATION);
-  // const[username,setusername] = useState();
+  const [signoutMutation, { loading, error }] = useMutation(SIGNOUT_MUTATION);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   const handleSignout = async () => {
     try {
-      const { data } = await signoutmutation();
+      const { data } = await signoutMutation();
 
       if (data.signout.success) {
         localStorage.removeItem("authToken");
@@ -42,71 +38,85 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-8 lg:px-16 xl:px-24 2xl:px-32">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center">
-            {/* <img
-              src={logo}
-              alt="Doc-in Logo"
-              className="w-auto h-auto md:w-10 lg:w-1/4 mx-2 md:mx-0"
-            /> */}
             <PaperBoatLogo />
-            <div className="md:hidden ml-2 text-cyan-700">{username}</div>
           </div>
-          <div className="hidden md:flex items-center space-x-2">
-            <div className="relative">
-              {/* Profile Icon */}
-              <button onClick={toggleDropdown} className="focus:outline-none">
-                <div className="flex items-center">
-                  <UserCircleIcon className="w-10 h-10 md:w-12 md:h-12 text-cyan-500" />
-                  <span className="hidden md:inline ml-2 text-cyan-500">
-                    {username}
-                  </span>
-                  {/* Animated Dropdown/Cross Icon */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 ml-1 text-cyan-500 transition-transform duration-300 transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    style={{
-                      transform: isDropdownOpen
-                        ? "rotate(180deg)"
-                        : "rotate(0deg)",
-                    }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </button>
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 py-2 w-48 bg-cyan-200 border border-cyan-500 rounded shadow-lg">
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 text-cyan-500 hover:bg-cyan-900"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="block px-4 py-2 text-cyan-500 hover:bg-cyan-900"
-                  >
-                    Sign Up
-                  </Link>
-                  <button
-                    onClick={handleSignout}
-                    className="block px-4 py-2 text-cyan-500 hover:bg-cyan-900 focus:outline-none"
-                  >
-                    Signout
-                  </button>
-                </div>
+          <div className="text-[#555] sm:mx-4">
+            <button onClick={toggleSidebar} className="focus:outline-none">
+              {isSidebarOpen ? (
+                <FaTimes className="w-6 h-6" />
+              ) : (
+                <FaBars className="w-6 h-6" />
               )}
-            </div>
+            </button>
           </div>
         </div>
       </div>
+      {/* Sidebar Overlay for Mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10"
+          onClick={toggleSidebar}
+        >
+          <div className="bg-white border-l border-cyan-500 fixed top-0 right-0 h-full w-64 flex flex-col items-start">
+            <button
+              onClick={toggleSidebar}
+              className="text-cyan-500 absolute top-2 right-2 focus:outline-none"
+            >
+              <FaTimes className="w-6 h-6" />
+            </button>
+            <div className="text-cyan-500 my-16 mx-4 w-full">
+              {username && (
+                <div className="pb-2 w-full flex items-center">
+                  <FaUser className="w-6 h-6 mr-2" />
+                  {username}
+                </div>
+              )}
+              <div>
+                <hr className="border-t border-cyan-500 my-4 w-full" />
+                <div className="pb-2 w-full flex items-center mt-8">
+                  <FaInfo className="w-6 h-6 mr-2" />
+                  <Link to="/about" className="hover:underline">
+                    About
+                  </Link>
+                </div>
+                <div className="pb-2 w-full flex items-center mt-2">
+                  <div
+                    onClick={() => navigate("/trending")}
+                    className="text-cyan-500 py-2 flex items-center hover:underline cursor-pointer"
+                  >
+                    <FaFire className="w-6 h-6 mr-2" />
+                    Trending
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-grow"></div>
+            <hr className="border-t border-cyan-500 my-4 w-full" />
+            <Link
+              to="/login"
+              className="text-cyan-900 py-2 px-4 flex items-center hover:text-cyan-300"
+            >
+              <FaSignInAlt className="w-6 h-6 mr-2" />
+              Sign In
+            </Link>
+            <Link
+              to="/signup"
+              className="text-cyan-900 py-2 px-4 flex items-center hover:text-cyan-300"
+            >
+              <FaUserPlus className="w-6 h-6 mr-2" />
+              Sign Up
+            </Link>
+            <button
+              onClick={handleSignout}
+              className="text-cyan-900 py-2 px-4 flex items-center hover:text-cyan-300"
+            >
+              <FaSignOutAlt className="w-6 h-6 mr-2" />
+              Signout
+            </button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

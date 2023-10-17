@@ -36,6 +36,7 @@ export const CREATE_PDF_MUTATION = gql`
     $description: String!
     $link: String!
     $author: String!
+    $topic: String!
     $institution_name: String!
   ) {
     createPdf(
@@ -43,6 +44,7 @@ export const CREATE_PDF_MUTATION = gql`
       description: $description
       link: $link
       author: $author
+      topic: $topic
       institutionName: $institution_name
     ) {
       pdf {
@@ -53,6 +55,7 @@ export const CREATE_PDF_MUTATION = gql`
         id
         institutionName
         link
+        topic
         title
         upvote
       }
@@ -69,6 +72,7 @@ export const SEARCH_QUERY = gql`
       description
       institutionName
       link
+      topic
       upvote
       downvote
     }
@@ -109,6 +113,7 @@ export const USER_POST_QUERY = gql`
       id
       institutionName
       link
+      topic
       title
       upvote
     }
@@ -123,6 +128,7 @@ export const PDF_BY_ID = gql`
       description
       downvote
       id
+      topic
       institutionName
       link
       title
@@ -144,6 +150,7 @@ export const EDIT_PDF_MUTATION = gql`
     $author: String!
     $description: String!
     $institutionName: String!
+    $topic: String!
     $link: String!
     $title: String!
   ) {
@@ -153,6 +160,7 @@ export const EDIT_PDF_MUTATION = gql`
       description: $description
       institutionName: $institutionName
       link: $link
+      topic: $topic
       title: $title
     ) {
       pdf {
@@ -163,9 +171,27 @@ export const EDIT_PDF_MUTATION = gql`
         id
         institutionName
         link
+        topic
         title
         upvote
       }
+    }
+  }
+`;
+
+export const GET_TOP_PDFS = gql`
+  query getTopPDFs {
+    topPdfs {
+      upvote
+      title
+      link
+      institutionName
+      id
+      downvote
+      description
+      createdAt
+      topic
+      author
     }
   }
 `;
